@@ -16,7 +16,7 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         $quary = barang::with(
- 'getstok',
+    'getstok',
             'getsuplier',
             'getadmin',
         );

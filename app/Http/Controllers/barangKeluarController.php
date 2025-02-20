@@ -11,14 +11,35 @@ use Illuminate\Support\Facades\Auth;
 
 class barangKeluarController extends Controller
 {
-    public function index(){
-        return view('barang.barang-keluar.barangKeluar');
+    public function index(request $request){
+        $quary = BarangKeluar::with(
+                    'getstok',
+                    'getPelanggan',
+                    'getUser',
+                );
+        
+                if ($request->filled('tanggal_awal')&& $request->filled('tanggal_akhir')) {
+                    $quary = $quary->whereBetween('tanggal_buat',[
+        
+                        $request->tanggal_awal,
+                        $request->tanggal_akhir
+                    ]);
+        
+        
+                }
+                $quary->orderby('created_at','desc');
+                    $getBarangKeluar = $quary->paginate(10);
+                    $getTotalPendapatan = BarangKeluar::sum('sub_total');
+                    return view('barang.barang-keluar.barangKeluar',compact(
+                        'getBarangKeluar',
+                        'getTotalPendapatan'
+                    ));
     }
 
     public function create()
     {
-        $data = BarangKeluar::all();
-
+        $data = BarangKeluar::all()->first();
+        $id = $data->id;
         $lastid = BarangKeluar::max('id');
         $lastid = $lastid ? $lastid : 0;
 
@@ -37,8 +58,8 @@ class barangKeluarController extends Controller
 
         }
 
-    $lastestItem = BarangKeluar::lastest();
-    $id   =$lastestItem->id;
+    $lastestItem = BarangKeluar::latest();
+    $id   = $lastestItem->id;
     $data = $lastestItem->created_at->format('d/m/y');
     $kode_transaksi = 'TRK' . $id . '/' . $data;
 
