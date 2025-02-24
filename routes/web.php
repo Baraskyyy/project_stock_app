@@ -153,7 +153,7 @@ Route::middleware(['auth', 'cekLevel:superadmin,admin'])->group(function(){
          route::post('/barang-masuk/{id}','update');
 
         // ini untuk menghapus pelanggan
-        // route::get('/stok/{id}','destroy');
+        route::get('/stok/{id}','destroy');
 
         // # DOKUMENTASI PELANGGAN
     });

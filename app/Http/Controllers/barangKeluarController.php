@@ -19,7 +19,7 @@ class barangKeluarController extends Controller
                 );
         
                 if ($request->filled('tanggal_awal')&& $request->filled('tanggal_akhir')) {
-                    $quary = $quary->whereBetween('tanggal_buat',[
+                    $quary = $quary->whereBetween('tgl_buat',[
         
                         $request->tanggal_awal,
                         $request->tanggal_akhir
@@ -173,6 +173,25 @@ class barangKeluarController extends Controller
             ));
         }
         
+        public function destroy($id)
+        {
+            $delete = BarangKeluar::find($id);
+                $getId_barang_keluar = $delete->barang_id;
+                $getJumlah_barang_keluar = $delete->barang_id;
+            
+                $update = stok::find($getJumlah_barang_keluar);
+                    $getStok = $update->stok;
+                
+                    $jumlah_baru = $getStok + $getJumlah_barang_keluar;
+                $update->stok = $jumlah_baru;
+                $update->save();
+            
+            $delete->delete();
+            return redirect('/barang-keluar')->with(
+                'message',
+                'Data Berhasil Di Hapus'
+            );
+        }
 
 
     }
