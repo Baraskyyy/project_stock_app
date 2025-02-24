@@ -145,6 +145,9 @@ Route::middleware(['auth', 'cekLevel:superadmin,admin'])->group(function(){
         route::post('/barang-keluar/add','store');
         route::post('/barang-keluar/save','savabarangkeluar')->name('addBarangKeluar');
 
+        route::get('/barang-keluar/print/{id}','print');
+        
+
         // ini untuk edit pelanggan
          route::get('/barang-masuk/edit/{id}','edit');
          route::post('/barang-masuk/{id}','update');

@@ -38,8 +38,7 @@ class barangKeluarController extends Controller
 
     public function create()
     {
-        $data = BarangKeluar::all()->first();
-        $id = $data->id;
+        $data = BarangKeluar::all();
         $lastid = BarangKeluar::max('id');
         $lastid = $lastid ? $lastid : 0;
 
@@ -58,7 +57,7 @@ class barangKeluarController extends Controller
 
         }
 
-    $lastestItem = BarangKeluar::latest();
+    $lastestItem = BarangKeluar::latest()->first();
     $id   = $lastestItem->id;
     $data = $lastestItem->created_at->format('d/m/y');
     $kode_transaksi = 'TRK' . $id . '/' . $data;
@@ -160,19 +159,20 @@ class barangKeluarController extends Controller
                 'message',
                 'Barang Keluar add'
             );
-            
-                // kode_transaksi
-                // tgl_faktur
-                // tgl_jatuh_tempo
-                // pelanggan_id
-                // jenis_pembayaran
-                // barang_id
-                // jumlah_beli
-                // harga_jual
-                // diskon
-                // sub_total
-
         }
+
+        public function print($id)
+        {
+            $dataPrint = BarangKeluar::with(
+                'getStok',
+                'getPelanggan'
+            )->find($id);
+
+            return view('Nota.nota',compact(
+                'dataPrint'
+            ));
+        }
+        
 
 
     }
